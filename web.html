@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BOOKStore</title>
+  <link rel="icon" type="image/png" href="https://png.pngtree.com/png-vector/20240515/ourmid/pngtree-open-book-logo-png-image_12467719.png">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b1220;
+      color: #e8edf6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background: #0b1220;
+      padding: 15px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      
+    }
+    /* logo image in header */
+    #logo {
+      height: 66px;
+      max-width: 90%;
+      object-fit: contain;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    #searchBar {
+      display: flex;
+      justify-content: center;
+      padding: 10px;
+      background: #0b1220;
+    }
+    #searchInput {
+      width: 90%;
+      max-width: 400px;
+      padding: 8px;
+      border-radius: 6px;
+      border: none;
+      font-size: 16px;
+    }
+    .books {
+      display: grid;
+      gap: 20px;
+      padding: 20px;
+      justify-content: center;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+    .book {
+      background: #1c2940;
+      padding: 10px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .book img {
+      width: 100%;
+      height: auto;
+      max-width: 178px;
+      border-radius: 8px;
+    }
+    .price {
+      margin: 8px 0;
+      font-weight: bold;
+    }
+    .price .old {
+      text-decoration: line-through;
+      color: #ccc;
+      margin-right: 6px;
+    }
+    .price .new {
+      font-weight: bold;
+      color: limegreen;
+    }
+    .year {
+      font-style: none;
+      font-size: 14px;
+      margin-bottom: 5px;
+      color: #aaa;
+    }
+    .author {
+      font-style: none;
+      font-size: 14px;
+      margin-bottom: 5px;
+      color: #aaa;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    footer {
+      background: #121a2a;
+      padding: 8px;
+      text-align: center;
+      font-size: 14px;
+      color: #7a8aa0;
+      flex-shrink: 0;
+    }
+    #loginPopup {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  transition: 0.6s ease;
+    }
+    #loginBox {
+      background: #1c2940;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      position: relative;
+      width: 100%;
+      max-width: 350px;
+    }
+    #loginBox input {
+      width: 90%;
+      max-width: 280px;
+      margin: 8px 0;
+      padding: 8px;
+      border-radius: 6px;
+      border: none;
+    }
+    #closeLogin {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: red;
+      border: none;
+      color: white;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
+    }
+    /* Banner Carousel */
+    .banner-container {
+      position: relative;
+      overflow: hidden;
+      margin: 20px auto;
+      width: 95%;
+      border-radius: 20px;
+    }
+    .banner-slide {
+      display: flex;
+      transition: transform 0.8s ease-in-out;
+    }
+    .banner-item {
+      min-width: 100%;
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .banner-item img {
+      width: 100%;
+      height: auto;
+      border-radius: 20px;
+      object-fit: cover;
+    }
+    /* Desktop ratio 5:1 */
+    @media (min-width: 768px) {
+      .banner-container {
+        aspect-ratio: 5/1;
+      }
+      .banner-item:nth-child(1) img {
+        content: url('channel.png');
+      }
+      .banner-item:nth-child(2) img {
+        content: url('unpromo.png');
+      }
+    }
+ /* Mobile ratio 9:5 (cropped) */
+    @media (max-width: 767px) {
+      .banner-container {
+        aspect-ratio: 9/5;
+      }
+      .banner-item img {
+        object-fit: cover;
+        object-position: center;
+      }
+      .banner-item:nth-child(1) img {
+        content: url('channelmobile.png');
+      }
+      .banner-item:nth-child(2) img {
+        content: url('unpromomobile.png');
+      }
+      
+    }
+    #previewOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      flex-direction: column;
+    }
+    #previewHeader {
+      background: #121a2a;
+      padding: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    #pdfFrame {
+      flex: 1;
+      width: 100%;
+      border: none;
+    }
+    #greeting {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    /* small tick image next to Admin greeting */
+    #greeting img {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+      display: inline-block;
+    }
+    /* color the Admin tag red */
+    #greeting .Admin {
+      color: rgb(255, 0, 0);
+      font-weight: bold;
+    }
+    #fakeAddBtn {
+      display: none;
+      margin: 10px auto;
+      background: #2264ff;
+    }
+    @media (max-width: 600px) {
+      header {
+        font-size: 20px;
+      }
+      .books {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (min-width: 1024px) {
+      .books {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+     /* Dots */
+    .dots {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .dot {
+      height: 12px;
+      width: 12px;
+      margin: 0 5px;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .dot.active {
+      background-color: #fff;
+    }
+/* ensure cards always fill their grid cell */
+.card{
+  background: #1c2940;
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+  text-decoration: none;
+  color: #fff;
+}
+
+/* responsive image containers */
+.cover,
+.oswaal {
+  width: 100%;
+  max-width: 340px; /* reasonable max on wide screens */
+  height: 140px;
+  background: #1c2940;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* make images fluid and preserve aspect */
+.cover img,
+.oswaal img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ===== COOL NAVBAR ===== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  padding: 10px 0;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.bottom-nav .nav-item {
+  color: #aaa;
+  text-align: center;
+  flex: 1;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.bottom-nav .nav-item:hover {
+  color: #fff;
+  transform: scale(1.2);
+}
+
+/* Highlight current active tab */
+.bottom-nav .nav-item.active {
+  color: #4dabff;
+}
+
+.bottom-nav .nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40%;
+  height: 3px;
+  background: #4dabff;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+    </style>
+</head>
+<body>
+   <header>
+    <img src="logo.png" alt="BOOKStore" id="logo">
+    </div>
+  </header>
+<!-- Search Bar --> <div id="searchBar"> <input type="text" id="searchInput" placeholder="Search by Title, Author, or Year..." onkeyup="searchBooks()"> </div>
+  <div id="greeting"></div>
+  <button id="fakeAddBtn">+ Add New Book</button>
+ <!-- Moving Banners -->
+  <div class="banner-container" id="bannerContainer">
+    <div class="banner-slide" id="bannerSlide">
+      <div class="banner-item">
+        <a href="https://www.youtube.com/@Next-ToppersEdits"><img src="channel.png" alt="Channel-Promotion"></a>
+      </div>
+      <div class="banner-item">
+        <img src="unpromo.png" alt="Un Banner">
+      </div>
+    </div>
+  </div>
+  <div class="dots">
+    <span class="dot active" onclick="setSlide(0)"></span>
+    <span class="dot" onclick="setSlide(1)"></span>
+    <span class="dot" onclick="setSlide(2)"></span>
+  </div>
+
+  <!-- Login -->
+  <div id="loginPopup">
+    <div id="loginBox">
+      <button id="closeLogin">x</button>
+      <h2>Login</h2>
+      <input type="text" id="username" placeholder="Enter Username"><br>
+      <button id="loginBtn">Submit</button>
+    </div>
+  </div>
+
+  <!-- Books -->
+   <div class="books">
+
+    <div class="book">
+      <img src="RD.jpg" onerror="this.onerror=null;this.src='error.jpg';">
+      <h3>RD Sharma</h3>
+      <div class="year">Class: X</div>
+      <div class="year">Edition: 2023-2024</div>
+      <div class="author">Author: RD Sharma</div>
+      <div class="price" style="color:limegreen;">Free</div>
+      <button onclick="previewPDF('https://drive.google.com/file/d/1sKoawaJf2PUk8dWSFvrcoGjC_0V0k8GS/preview')">Preview</button>
+    </div>
+    <div class="book">
+      <img src="unbarbaad.jpg"  onerror="this.onerror=null;this.src='error.jpg';">
+      <h3>Unbarbaad</h3>
+      <div class="author">Author: Shobit Nirwan</div>
+      <div class="price" style="color:limegreen;">Free</div>
+      <button onclick="previewPDF('https://drive.google.com/file/d/1KVuKBojVZLSi-dnjfVM1BkOp93w_1o4l/preview')">Preview</button>
+    </div>
+  </div>
+  
+  <!-- Preview -->
+  <div id="previewOverlay">
+    <div id="previewHeader">
+      <span style="font-weight:bold;">PDF Preview</span>
+      <div>
+        <button onclick="openFullscreen()">Fullscreen</button>
+        <button onclick="closePreview()">Close</button>
+      </div>
+    </div>
+    <iframe id="pdfFrame" sandbox="allow-scripts allow-same-origin"></iframe>
+  </div>
+
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+  <a href="index.html" class="nav-item active">
+    🏠<br><span>Home</span>
+  </a>
+  <a href="game.html" class="nav-item">
+    🎮<br><span>Game</span>
+  </a>
+  <a href="ai.html" class="nav-item">
+    🤖<br><span>AI</span>
+  </a>
+  <a href="collection.html" class="nav-item">
+    📚<br><span>Collections</span>
+  </a>
+</nav>
+
+<style>
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #121a2a;
+    display: flex;
+    justify-content: space-around;
+    border-top: 2px solid #1f2a3d;
+    z-index: 999;
+  }
+  .nav-item {
+    flex: 1;
+    text-align: center;
+    color: #aaa;
+    padding: 8px 0;
+    font-size: 14px;
+    text-decoration: none;
+    transition: 0.2s;
+  }
+  .nav-item span {
+    display: block;
+    font-size: 12px;
+  }
+  .nav-item.active,
+  .nav-item:hover {
+    color: #4dabff;
+    font-weight: bold;
+  }
+  body {
+    padding-bottom: 60px; /* prevent content from hiding behind nav */
+  }
+</style>
+
+<script>
+  // Highlight current tab automatically
+  const currentPage = location.pathname.split('/').pop();
+  document.querySelectorAll('.nav-item').forEach(link => {
+    if (link.getAttribute('href') === currentPage) {
+      link.classList.add('active');
+    }
+  });
+  const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      // Remove active from all
+      navItems.forEach(i => i.classList.remove('active'));
+      // Add active to clicked
+      item.classList.add('active');
+    });
+  });
+
+  // Optional: highlight based on current URL
+  navItems.forEach(item => {
+    if(item.href === window.location.href) {
+      item.classList.add('active');
+    }
+  });
+</script>
+
+
+  <script>
+    const allowedUsers = ["BhaveshTop","Mayank","Rehan","Ashu","Devyank","Parth"];
+    const loginPopup = document.getElementById("loginPopup");
+    const loginBtn = document.getElementById("loginBtn");
+    const closeLogin = document.getElementById("closeLogin");
+    const usernameInput = document.getElementById("username");
+    const greeting = document.getElementById("greeting");
+    const fakeAddBtn = document.getElementById("fakeAddBtn");
+    const buyUnbarbaadBtn = document.getElementById("buyUnbarbaad");
+    const previewOverlay = document.getElementById("previewOverlay");
+    const pdfFrame = document.getElementById("pdfFrame");
+
+    if(localStorage.getItem("username")) initUser(localStorage.getItem("username"));
+
+    loginBtn.onclick = () => {
+      const user = usernameInput.value.trim();
+      if(user && allowedUsers.includes(user)) {
+        localStorage.setItem("username", user);
+        initUser(user);
+      } else {
+        alert("Access Denied!");
+      }
+    };
+    closeLogin.onclick = () => loginPopup.style.display = "none";
+
+    function initUser(user){
+      loginPopup.style.display = "none";
+      if(user === "BhaveshTop"){
+        // show tick.png aligned with the greeting for the Admin
+        greeting.innerHTML = '<span>Welcome, Bhavesh (Admin)</span><img src="https://static.vecteezy.com/system/resources/thumbnails/034/211/380/small_2x/blue-checkmark-validation-social-media-png.png" alt="Admin tick">';
+        greeting.innerHTML = '<span>Welcome, Bhavesh <span class="Admin">(Admin)</span></span><img src="https://static.vecteezy.com/system/resources/thumbnails/034/211/380/small_2x/blue-checkmark-validation-social-media-png.png" alt="Admin tick">';
+        fakeAddBtn.style.display = "block";
+      } else {
+        greeting.innerHTML = '<span>Welcome ' + user + '</span>';
+      }
+    }
+ // Simple Auto Carousel
+    let index = 0;
+    const slides = document.getElementById("bannerSlide");
+    const totalSlides = slides.children.length;
+function updateDots() {
+      dots.forEach((dot, i) => {
+        dot.classList.toggle("active", i === index);
+      });
+    }
+    function showSlide() {
+      index = (index + 1) % totalSlides;
+      slides.style.transform = `translateX(-${index * 100}%)`;
+    }
+   
+  function setSlide(n) {
+      index = n;
+      slides.style.transform = `translateX(-${index * 100}%)`;
+      updateDots();
+    }
+     setInterval(showSlide, 4000);
+     // Swipe support for mobile
+    let startX = 0;
+    let endX = 0;
+    const bannerContainer = document.getElementById("bannerContainer");
+
+    bannerContainer.addEventListener("touchstart", (e) => {
+      startX = e.touches[0].clientX;
+    });
+
+    bannerContainer.addEventListener("touchend", (e) => {
+      endX = e.changedTouches[0].clientX;
+      handleSwipe();
+    });
+
+    function handleSwipe() {
+      const diff = endX - startX;
+      if (Math.abs(diff) > 50) { // swipe threshold
+        if (diff > 0) {
+          index = (index - 1 + totalSlides) % totalSlides; // swipe right
+        } else {
+          index = (index + 1) % totalSlides; // swipe left
+        }
+        slides.style.transform = `translateX(-${index * 100}%)`;
+        updateDots();
+      }
+    }
+
+     function toggleMenu(){
+      document.getElementById("sidebar")?.classList.toggle("active");
+    }
+    function previewPDF(file) {
+      pdfFrame.src = file + "#toolbar=0&navpanes=0&scrollbar=0";
+      previewOverlay.style.display = "flex";
+    }
+    function closePreview() {
+      previewOverlay.style.display = "none";
+      pdfFrame.src = "";
+    }
+    function openFullscreen() {
+      if (pdfFrame.requestFullscreen) pdfFrame.requestFullscreen();
+    }
+
+    // Disable right-click
+    document.addEventListener("contextmenu", e => e.preventDefault());
+
+    // Block common shortcut keys
+    document.addEventListener("keydown", e => {
+      if ( 
+        (e.ctrlKey && ["s","u","p"].includes(e.key.toLowerCase())) ||
+        (e.ctrlKey && e.shiftKey && ["i","j","c"].includes(e.key.toLowerCase())) ||
+        (e.key === "PrintScreen")
+      ) {
+        e.preventDefault();
+        alert("Export/Download is disabled!");
+      }
+    });
+    function searchBooks() { let input = document.getElementById('searchInput').value.toLowerCase(); let books = document.getElementsByClassName('book'); for (let i = 0; i < books.length; i++) { let title = books[i].getElementsByTagName("h3")[0].innerText.toLowerCase(); let author = books[i].getElementsByClassName("author")[0]?.innerText.toLowerCase() || ""; let year = books[i].getElementsByClassName("year")[0]?.innerText.toLowerCase() || ""; if (title.includes(input) || author.includes(input) || year.includes(input)) { books[i].style.display = "block"; } else { books[i].style.display = "none"; } } }
+  </script>
+</body>
+</html>
