@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>100x Josh</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #0b1220;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: top;
+      align-items: center;
+      transition:0.3s, color 0.3s;
+    }
+
+    header {
+      background: #0b1220;
+      padding: 15px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      
+    }
+    /* logo image in header */
+    #logo {
+      height: 66px;
+      max-width: 90%;
+      object-fit: contain;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    h1 {
+      margin: 10px 0;
+    }
+
+    #timer {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    #game {
+      display: grid;
+      grid-template-columns: repeat(5, 80px);
+      grid-gap: 10px;
+      margin: 20px 0;
+    }
+
+    .box {
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+      background: #1c2940;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .correct {
+      background: #28a745 !important;
+      color: white !important;
+    }
+
+    .wrong {
+      background: #dc3545 !important;
+      color: white !important;
+    }
+
+    #controls {
+      margin-top: 15px;
+    }
+
+    button {
+      padding: 8px 16px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+      margin: 5px;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    #popup {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #popupContent {
+      background: #1c2940;
+      padding: 20px;
+      border-radius: 10px;
+      width: 280px;
+      text-align: center;
+    }
+
+    #popup button {
+      background: #28a745;
+    }
+
+    #popup button:hover {
+      background: #1e7e34;
+    }
+    /* Mobile Responsive */
+    @media only screen and (max-width: 480px) {
+      #game {
+        grid-template-columns: repeat(5, 14vw);
+        grid-gap: 2vw;
+        margin: 15px 0;
+      }
+      .box {
+        width: 14vw;
+        height: 14vw;
+        font-size: 4vw;
+      }
+      #timer {
+        font-size: 5vw;
+      }
+      button {
+        padding: 3vw 5vw;
+        font-size: 4vw;
+      }
+      h1 {
+        font-size: 7vw;
+      }
+      #popupContent {
+        width: 80vw;
+        padding: 5vw;
+      }
+    }
+    
+/* ===== COOL NAVBAR ===== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  padding: 10px 0;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.bottom-nav .nav-item {
+  color: #aaa;
+  text-align: center;
+  flex: 1;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.bottom-nav .nav-item:hover {
+  color: #fff;
+  transform: scale(1.2);
+}
+
+/* Highlight current active tab */
+.bottom-nav .nav-item.active {
+  color: #4dabff;
+}
+
+.bottom-nav .nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40%;
+  height: 3px;
+  background: #4dabff;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+  </style>
+</head>
+<body>
+
+   <header>
+    <img src="logo.png" alt="BOOKStore" id="logo">
+    </div>
+  </header>
+  <h1>100x Josh</h1>
+  <div id="timer">Time Left: 25s</div>
+  <div id="game"></div>
+  <div id="controls">
+    <button onclick="startGame()">Shuffle & Restart</button>
+  </div>
+
+  <!-- Popup -->
+  <div id="popup">
+    <div id="popupContent">
+      <h2>⏰ Time Over!</h2>
+      <p id="scoreText"></p>
+      <p id="highScoreText"></p>
+      <button onclick="closePopup()">OK</button>
+    </div>
+  </div>
+  
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+  <a href="index.html" class="nav-item">
+    🏠<br><span>Home</span>
+  </a>
+  <a href="game.html" class="nav-item active">
+    🎮<br><span>Game</span>
+  </a>
+  <a href="ai.html" class="nav-item">
+    🤖<br><span>AI</span>
+  </a>
+  <a href="collection.html" class="nav-item">
+    📚<br><span>Collections</span>
+  </a>
+</nav>
+
+<style>
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #121a2a;
+    display: flex;
+    justify-content: space-around;
+    border-top: 2px solid #1f2a3d;
+    z-index: 999;
+  }
+  .nav-item {
+    flex: 1;
+    text-align: center;
+    color: #aaa;
+    padding: 8px 0;
+    font-size: 14px;
+    text-decoration: none;
+    transition: 0.2s;
+  }
+  .nav-item span {
+    display: block;
+    font-size: 12px;
+  }
+  .nav-item.active,
+  .nav-item:hover {
+    color: #4dabff;
+    font-weight: bold;
+  }
+  body {
+    padding-bottom: 60px; /* prevent content from hiding behind nav */
+  }
+</style>
+
+<script>
+  // Highlight current tab automatically
+  const currentPage = location.pathname.split('/').pop();
+  document.querySelectorAll('.nav-item').forEach(link => {
+    if (link.getAttribute('href') === currentPage) {
+      link.classList.add('active');
+    }
+  });
+  const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      // Remove active from all
+      navItems.forEach(i => i.classList.remove('active'));
+      // Add active to clicked
+      item.classList.add('active');
+    });
+  });
+
+  // Optional: highlight based on current URL
+  navItems.forEach(item => {
+    if(item.href === window.location.href) {
+      item.classList.add('active');
+    }
+  });
+</script>
+
+  <script>
+    const gameBoard = document.getElementById("game");
+    const timerDisplay = document.getElementById("timer");
+    const popup = document.getElementById("popup");
+    const scoreText = document.getElementById("scoreText");
+    const highScoreText = document.getElementById("highScoreText");
+    
+    let numbers = [];
+    let nextNumber = 1;
+    let timer;
+    let timeLeft = 25;
+    let highestScore = localStorage.getItem("highestScore") 
+                       ? parseInt(localStorage.getItem("highestScore")) 
+                       : 0;
+
+    function shuffle(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
+    function startGame() {
+      numbers = shuffle([...Array(25).keys()].map(n => n + 1));
+      gameBoard.innerHTML = "";
+      nextNumber = 1;
+      timeLeft = 25;
+      clearInterval(timer);
+      startTimer();
+
+      numbers.forEach(num => {
+        const div = document.createElement("div");
+        div.classList.add("box");
+        div.textContent = num;
+        div.addEventListener("click", () => handleClick(div, num));
+        gameBoard.appendChild(div);
+      });
+    }
+
+    function handleClick(div, num) {
+      if (num === nextNumber) {
+        div.classList.add("correct");
+        nextNumber++;
+        if (nextNumber > 25) {
+          clearInterval(timer);
+          setTimeout(() => showPopup(true), 300);
+        }
+      } else {
+        div.classList.add("wrong");
+        setTimeout(() => div.classList.remove("wrong"), 1000);
+      }
+    }
+
+    function startTimer() {
+      timerDisplay.textContent = `Time Left: ${timeLeft}s`;
+      timer = setInterval(() => {
+        timeLeft--;
+        timerDisplay.textContent = `Time Left: ${timeLeft}s`;
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          showPopup(false);
+        }
+      }, 1000);
+    }
+
+    function showPopup(win) {
+      let score = nextNumber - 1;
+      if (score > highestScore) {
+        highestScore = score;
+        localStorage.setItem("highestScore", highestScore);
+      }
+      scoreText.textContent = `Numbers Found: ${score}`;
+      highScoreText.textContent = `Highest Score: ${highestScore}`;
+      popup.style.display = "flex";
+    }
+
+    function closePopup() {
+      popup.style.display = "none";
+      startGame();
+    }
+
+    // Start game on load
+    startGame();
+  </script>
+
+</body>
+</html>
