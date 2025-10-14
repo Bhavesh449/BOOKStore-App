@@ -236,16 +236,16 @@
 <!-- Bottom Navigation -->
 <nav class="bottom-nav">
   <a href="index.html" class="nav-item">
-    🏠<br><span>Home</span>
+    <img src="home.svg" alt="Home" class="nav-icon"><br><span>Home</span>
   </a>
   <a href="game.html" class="nav-item">
-    🎮<br><span>Game</span>
+    <img src="game.svg" alt="Game" class="nav-icon"><br><span>Game</span>
   </a>
   <a href="ai.html" class="nav-item">
-    🤖<br><span>AI</span>
+    <img src="ai.svg" alt="AI" class="nav-icon"><br><span>AI</span>
   </a>
   <a href="collection.html" class="nav-item active">
-    📚<br><span>Collections</span>
+    <img src="collection.svg" alt="Collections" class="nav-icon"><br><span>Collections</span>
   </a>
 </nav>
 
@@ -269,6 +269,13 @@
     font-size: 14px;
     text-decoration: none;
     transition: 0.2s;
+  }
+  .nav-icon {
+    height: 20px;
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 4px;
   }
   .nav-item span {
     display: block;
