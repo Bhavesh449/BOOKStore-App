@@ -119,11 +119,27 @@
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     }
     .book {
+      position: relative; /* needed for badge positioning */
       background: #1c2940;
       padding: 10px;
       border-radius: 12px;
       text-align: center;
     }
+
+   /* Golden "New" badge */
+   .badge-new {
+     position: absolute;
+     top: 1px;
+     left: 1px;
+     background: linear-gradient(135deg,#004483,#0b87fc);
+     color: #fff;
+     font-weight: 700;
+     padding: 7px 10px;
+     border-radius: 999px;
+     font-size: 12px;
+     box-shadow: 0 6px 18px rgba(184,134,11,0.18), inset 0 1px 0 rgba(255,255,255,0.06);
+     line-height: 1;
+   }
     .book img {
       width: 100%;
       height: auto;
@@ -283,8 +299,18 @@
   <div class="subtitle">"kaisa bhi ho Sawal sahi jawab Oswaal"</div>
 </div>
   <!-- Books -->
-   <div class="books">
+  <div class="books">
      <div class="book">
+      <span class="badge-new">New</span>
+      <img src="https://m.media-amazon.com/images/I/815cDuEv4-L._UF1000,1000_QL80_.jpg">
+      <h3>Oswaal CBSE 10 Years Solved Papers(All Subjects)</h3>
+      <div class="year">Class: X</div>
+     <div class="year">Year: 2024-25</div>
+      <div class="author">Author: Oswaal</div>
+      <div class="price" style="color:limegreen;">Free</div>
+      <button onclick="previewPDF('https://drive.google.com/file/d/1TJ_JeeP93fs0MXH49qAC2OBHRYSissg4/preview')">Preview</button>
+    </div>
+    <div class="book">
       <img src="https://m.media-amazon.com/images/I/81TITBtA1zL._UF1000,1000_QL80_.jpg">
       <h3>Question Bank Mathematics (Standard)</h3>
       <div class="year">Class: X</div>
