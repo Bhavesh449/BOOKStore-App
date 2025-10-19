@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Account | BOOKStore</title>
+  <link rel="icon" type="image/png" href="https://png.pngtree.com/png-vector/20240515/ourmid/pngtree-open-book-logo-png-image_12467719.png">
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b1220;
+      color: #e8edf6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding-bottom: 60px; /* Space for the fixed bottom nav */
+    }
+    header {
+      background: #0b1220;
+      padding: 15px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      border-bottom: 1px solid #1f2a3d;
+    }
+    #logo {
+      height: 66px;
+      max-width: 90%;
+      object-fit: contain;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .container {
+      max-width: 600px;
+      width: 90%;
+      margin: 20px auto;
+      padding: 20px;
+      background: #1c2940;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    h2 {
+      color: #4dabff;
+      border-bottom: 2px solid #1f2a3d;
+      padding-bottom: 10px;
+      margin-top: 0;
+    }
+
+    /* Profile Info Section */
+    .profile-info {
+      margin-bottom: 30px;
+      padding: 15px;
+      background: #121a2a;
+      border-radius: 8px;
+    }
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px dotted #2d3c54;
+    }
+    .info-item:last-child {
+      border-bottom: none;
+    }
+    .label {
+      font-weight: bold;
+      color: #aaa;
+    }
+    #displayName, #userEmail {
+      font-size: 1.1em;
+      color: #e8edf6;
+      cursor: pointer;
+      padding: 2px 5px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+    #displayName:hover {
+      background-color: #2d3c54;
+    }
+    #nameInput {
+      background: #0b1220;
+      border: 1px solid #4dabff;
+      color: #e8edf6;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-size: 1.1em;
+      width: 150px;
+    }
+
+
+    /* Password Change Form */
+    .password-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .password-form input {
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      background-color: #0b1220;
+      color: #e8edf6;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #logoutBtn {
+        background: #dc3545;
+    }
+    #logoutBtn:hover {
+        background: #c82333;
+    }
+    #messageBox {
+      padding: 10px;
+      border-radius: 6px;
+      margin-top: 15px;
+      font-weight: bold;
+      text-align: center;
+      display: none;
+    }
+    /* Dynamic Message Colors via JS */
+    .error { background: #dc3545; color: white; }
+    .success { background: #4dabff; color: white; }
+
+    /* ===== COOL NAVBAR ===== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  padding: 10px 0;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.bottom-nav .nav-item {
+  color: #aaa;
+  text-align: center;
+  flex: 1;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.bottom-nav .nav-item:hover {
+  color: #fff;
+  transform: scale(1.2);
+}
+
+/* Highlight current active tab */
+.bottom-nav .nav-item.active {
+  color: #4dabff;
+}
+
+.bottom-nav .nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40%;
+  height: 3px;
+  background: #4dabff;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+    /* Top-left back button (same as Oswaal) */
+    .back-btn {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1100;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.03);
+      text-decoration: none;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+    .back-btn svg {
+      width: 20px;
+      height: 20px;
+      display: block;
+      fill: #e8edf6;
+    }
+    .back-btn:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.06);
+    }
+  </style>
+</head>
+<body>
+   <header>
+     <img src="logo.png" alt="BOOKStore" id="logo">
+   </header>
+
+  <div class="container" id="accountContainer">
+    <h2 id="pageTitle">My Account</h2>
+    
+    <div id="profileDetails">
+        <!-- User details will be populated here -->
+    </div>
+    
+    <!-- Password Change Section -->
+    <h2 style="margin-top: 30px;">Change Password</h2>
+    <div id="passwordFormContainer">
+        <div class="password-form">
+            <input type="password" id="currentPassword" placeholder="Current Password" required>
+            <input type="password" id="newPassword" placeholder="New Password (min 6 characters)" required>
+            <input type="password" id="confirmNewPassword" placeholder="Confirm New Password" required>
+            <button id="changePasswordBtn">Update Password</button>
+        </div>
+    </div>
+    
+    <div id="messageBox"></div>
+
+    <button id="logoutBtn" style="margin-top: 30px; width: 100%;">Log Out</button>
+  </div>
+
+  <!-- Bottom Navigation (Using 'ai.html' as a placeholder for the Account/Profile tab) -->
+ 
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <img src="home.svg" alt="Home" class="nav-icon"><br><span>Home</span>
+    </a>
+    <a href="game.html" class="nav-item">
+      <img src="game.svg" alt="Game" class="nav-icon"><br><span>Game</span>
+    </a>
+    <a href="collection.html" class="nav-item">
+      <img src="collection.svg" alt="Collections" class="nav-icon"><br><span>Collections</span>
+    </a>
+    <a href="profile.html" class="nav-item active">
+      <img src="ai.svg" alt="Profile" class="nav-icon"><br><span>Account</span>
+    </a>
+  </nav>
+
+<style>
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #121a2a;
+    display: flex;
+    justify-content: space-around;
+    border-top: 2px solid #1f2a3d;
+    z-index: 999;
+  }
+  .nav-item {
+    flex: 1;
+    text-align: center;
+    color: #aaa;
+    padding: 8px 0;
+    font-size: 14px;
+    text-decoration: none;
+    transition: 0.2s;
+  }
+  .nav-icon {
+    height: 20px;
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 4px;
+  }
+  .nav-item span {
+    display: block;
+    font-size: 12px;
+  }
+  .nav-item.active,
+  .nav-item:hover {
+    color: #4dabff;
+    font-weight: bold;
+  }
+  body {
+    padding-bottom: 60px; /* prevent content from hiding behind nav */
+  }
+</style>
+
+<script>
+    // 1. Firebase Configuration (MUST MATCH index.html)
+    const firebaseConfig = {
+      apiKey: "AIzaSyCcpG-oEqkDprgTwWXKt5CFsttjAQAZFNg",
+      authDomain: "bookstore-6ab08.firebaseapp.com",
+      projectId: "bookstore-6ab08",
+      storageBucket: "bookstore-6ab08.firebasestorage.app",
+      messagingSenderId: "102226032749",
+      appId: "1:102226032749:web:f7090175d2e53c2f522764",
+      measurementId: "G-R9N7YSCMY0"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = app.auth();
+
+    // 2. Element References
+    const container = document.getElementById("accountContainer");
+    const profileDetails = document.getElementById("profileDetails");
+    const currentPasswordField = document.getElementById("currentPassword");
+    const newPasswordField = document.getElementById("newPassword");
+    const confirmNewPasswordField = document.getElementById("confirmNewPassword");
+    const changePasswordBtn = document.getElementById("changePasswordBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const messageBox = document.getElementById("messageBox");
+
+    let currentUser = null; // To hold the authenticated user object
+
+    /**
+     * Display a temporary message to the user.
+     * @param {string} message The text content.
+     * @param {boolean} isError True for errors (red), false for success (blue).
+     */
+    function displayMessage(message, isError = false) {
+      messageBox.textContent = message;
+      messageBox.className = isError ? 'error' : 'success';
+      messageBox.style.display = 'block';
+      setTimeout(() => {
+        messageBox.style.display = 'none';
+      }, 5000);
+    }
+
+    /**
+     * Renders the user's profile details with an editable display name.
+     * @param {firebase.User} user The authenticated Firebase user object.
+     */
+    function renderProfile(user) {
+      currentUser = user;
+      
+      const displayName = user.displayName || (user.email ? user.email.split('@')[0] : 'User');
+      const email = user.email || 'N/A';
+      
+      profileDetails.innerHTML = `
+        <div class="profile-info">
+          <div class="info-item">
+            <span class="label">Display Name:</span>
+            <span id="displayName" title="Double-click to edit">${displayName}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Email:</span>
+            <span id="userEmail">${email}</span>
+          </div>
+        </div>
+      `;
+
+      // Set up the double-click edit functionality for the display name
+      setupGreetingEdit(user);
+      
+      // Clear password fields on successful render
+      currentPasswordField.value = '';
+      newPasswordField.value = '';
+      confirmNewPasswordField.value = '';
+    }
+
+    // 3. Display Name Editing Logic (adapted from previous file)
+    function setupGreetingEdit(user) {
+        const nameSpan = document.getElementById('displayName');
+        if (!nameSpan) return;
+
+        // Attach double-click listener
+        nameSpan.ondblclick = () => {
+            const currentName = nameSpan.textContent.trim();
+            
+            // Create the input field
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentName;
+            input.id = 'nameInput';
+            
+            nameSpan.parentNode.replaceChild(input, nameSpan);
+            input.focus();
+
+            const saveEdit = async () => {
+                const newName = input.value.trim();
+                
+                if (newName && newName !== currentName) {
+                    await saveDisplayName(user, newName, input, nameSpan);
+                } else {
+                    // Revert if cancelled, empty, or unchanged
+                    revertToSpan(input, currentName);
+                }
+            };
+
+            // Save on blur or Enter key press
+            input.onblur = saveEdit;
+            input.onkeydown = (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault(); 
+                    saveEdit();
+                }
+            };
+        };
+    }
+    
+    function revertToSpan(inputElement, originalName) {
+        const revertSpan = document.createElement('span');
+        revertSpan.id = 'displayName';
+        revertSpan.title = "Double-click to edit";
+        revertSpan.textContent = originalName;
+        inputElement.parentNode.replaceChild(revertSpan, inputElement);
+        setupGreetingEdit(currentUser); // Re-attach listener
+    }
+
+    async function saveDisplayName(user, newName, inputElement, originalSpan) {
+        // Optimistic update
+        inputElement.parentNode.replaceChild(originalSpan, inputElement);
+        originalSpan.textContent = newName;
+        originalSpan.id = 'displayName'; // Ensure ID is correct for re-attachment
+        
+        try {
+            await user.updateProfile({ displayName: newName });
+            displayMessage("Display name updated successfully!", false);
+        } catch (error) {
+            console.error("Error updating display name:", error);
+            displayMessage("Failed to save name: " + error.message, true);
+            // Revert on failure
+            originalSpan.textContent = user.displayName;
+        } finally {
+            setupGreetingEdit(user); // Re-attach dblclick listener
+        }
+    }
+
+
+    // 4. Password Change Logic
+    changePasswordBtn.onclick = async () => {
+        const user = currentUser;
+        if (!user) {
+            displayMessage("You must be logged in to change your password.", true);
+            return;
+        }
+        
+        const currentPassword = currentPasswordField.value;
+        const newPassword = newPasswordField.value;
+        const confirmNewPassword = confirmNewPasswordField.value;
+
+        if (!currentPassword || !newPassword || !confirmNewPassword) {
+            displayMessage("All password fields are required.", true);
+            return;
+        }
+
+        if (newPassword !== confirmNewPassword) {
+            displayMessage("New passwords do not match.", true);
+            return;
+        }
+        
+        if (newPassword.length < 6) {
+            displayMessage("New password must be at least 6 characters.", true);
+            return;
+        }
+        
+        changePasswordBtn.disabled = true;
+        changePasswordBtn.textContent = 'Updating...';
+
+        try {
+            // 1. Re-authenticate the user with their current password.
+            // This is required by Firebase for security-sensitive operations like password change.
+            const credential = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
+            await user.reauthenticateWithCredential(credential);
+
+            // 2. If re-authentication succeeds, update the password.
+            await user.updatePassword(newPassword);
+
+            displayMessage("Password updated successfully! You must log in again with your new password.", false);
+            
+            // Clear fields
+            currentPasswordField.value = '';
+            newPasswordField.value = '';
+            confirmNewPasswordField.value = '';
+            
+            // Optional: Log out user after successful password change for security
+            setTimeout(() => auth.signOut(), 3000); 
+
+        } catch (error) {
+            let errorMessage = "Failed to update password. ";
+            if (error.code === 'auth/requires-recent-login') {
+                errorMessage = "For security, please log out, log back in, and try again.";
+            } else if (error.code === 'auth/wrong-password') {
+                errorMessage = "Current password is incorrect.";
+            } else if (error.code === 'auth/invalid-email') {
+                errorMessage = "Invalid email. (This should not happen if logged in)";
+            } else {
+                errorMessage += error.message;
+            }
+            displayMessage(errorMessage, true);
+        } finally {
+            changePasswordBtn.disabled = false;
+            changePasswordBtn.textContent = 'Update Password';
+        }
+    };
+
+
+    // 5. Log Out Handler
+    logoutBtn.onclick = async () => {
+        try {
+            await auth.signOut();
+            displayMessage("Logged out successfully! Redirecting...", false);
+            setTimeout(() => {
+                window.location.href = "index.html"; // Redirect to the main page
+            }, 1000);
+        } catch (error) {
+            displayMessage("Logout failed: " + error.message, true);
+        }
+    };
+
+    // 6. Auth State Listener
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        // User is signed in. Render profile details.
+        renderProfile(user);
+      } else {
+        // User is signed out. Display a prompt or redirect.
+        container.innerHTML = `
+            <div style="text-align: center; padding: 50px;">
+                <p style="font-size: 1.2em; color: #aaa;">You are not logged in.</p>
+                <p>Please <a href="index.html" style="color: #4dabff; text-decoration: underline;">log in</a> to view your account details.</p>
+            </div>
+        `;
+      }
+    });
+
+    // 7. Navigation Highlighting
+    document.querySelectorAll('.nav-item').forEach(link => {
+      if(link.href === window.location.href) {
+        link.classList.add('active');
+      }
+    });
+</script>
+</body>
+</html>
