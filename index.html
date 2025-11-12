@@ -38,19 +38,36 @@
       vertical-align: middle;
     }
     #searchBar {
-      display: flex;
-      justify-content: center;
-      padding: 10px;
-      background: #0b1220;
-    }
-    #searchInput {
-      width: 90%;
-      max-width: 400px;
-      padding: 8px;
-      border-radius: 6px;
-      border: none;
-      font-size: 16px;
-    }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: #0b1220;
+}
+
+#searchInput {
+  width: 90%;
+  max-width: 600px;
+  padding: 12px 45px;
+  border-radius: 50px;
+  border: 1px solid #3c4a66;
+  background-color: #1c2940;
+  color: #e8edf6;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+  background-image: url('https://cdn-icons-png.flaticon.com/512/622/622669.png');
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: 15px center;
+}
+
+#searchInput:focus {
+  background-color: #24314d;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.4);
+  border-color: #007bff;
+}
+
     .books {
       display: grid;
       gap: 20px;
