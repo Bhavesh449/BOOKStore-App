@@ -16,7 +16,7 @@
       min-height: 100vh;
     }
     header {
-      background: #121a2a;
+      background: #0b1220;
       padding: 15px;
       text-align: center;
       font-size: 24px;
@@ -63,19 +63,36 @@
        opacity: 0.95;
      }
     #searchBar {
-      display: flex;
-      justify-content: center;
-      padding: 10px;
-      background: #1c2940;
-    }
-    #searchInput {
-      width: 90%;
-      max-width: 400px;
-      padding: 8px;
-      border-radius: 6px;
-      border: none;
-      font-size: 16px;
-    }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: #0b1220;
+}
+
+#searchInput {
+  width: 90%;
+  max-width: 600px;
+  padding: 12px 45px;
+  border-radius: 50px;
+  border: 1px solid #3c4a66;
+  background-color: #1c2940;
+  color: #e8edf6;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+  background-image: url('https://cdn-icons-png.flaticon.com/512/622/622669.png');
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: 15px center;
+}
+
+#searchInput:focus {
+  background-color: #24314d;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.4);
+  border-color: #007bff;
+}
+
     .books {
       display: grid;
       gap: 20px;
@@ -215,10 +232,43 @@
   border-radius: 5px;
   transition: all 0.3s ease;
 }
-
+/* Top-left back button (same as Oswaal) */
+    .back-btn {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1100;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.03);
+      text-decoration: none;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+    .back-btn svg {
+      width: 20px;
+      height: 20px;
+      display: block;
+      fill: #e8edf6;
+    }
+    .back-btn:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.06);
+    }
     </style>
 </head>
 <body>
+   <!-- Back button (inline SVG) -->
+  <a href="collection.html" class="back-btn" aria-label="Go back to Collections">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+    </svg>
+  </a>
   <header>
    <img src="logo.png" alt="BOOKStore" id="logo">
     
