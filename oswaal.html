@@ -260,6 +260,32 @@
       transform: translateY(-2px);
       background: rgba(255,255,255,0.06);
     }
+   #previewOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  display: none;
+  flex-direction: column;
+  z-index: 2000;
+}
+
+#previewHeader {
+  height: 50px;
+  flex-shrink: 0;
+}
+
+#zoomWrapper {
+  flex: 1;
+  overflow: hidden; /* FIX */
+}
+
+#pdfFrame {
+  width: 100%;
+  height: 100%;   /* IMPORTANT */
+  border: none;
+  display: block;
+}
+
     </style>
 </head>
 <body>
@@ -377,7 +403,9 @@
         <button onclick="closePreview()">Close</button>
       </div>
     </div>
-    <iframe id="pdfFrame" sandbox="allow-scripts allow-same-origin"></iframe>
+    <div id="zoomWrapper">
+  <iframe id="pdfFrame" sandbox="allow-scripts allow-same-origin"></iframe>
+</div>
   </div>
 </div>
 
@@ -475,11 +503,17 @@ function removeBook(bookId) {
 
    
     
-    function previewPDF(file) {
-  if (!file) return; // skip if no PDF link
-  pdfFrame.src = file + "#toolbar=0&navpanes=0&scrollbar=0";
+   function previewPDF(file) {
+  if (!file) return;
   previewOverlay.style.display = "flex";
+
+  pdfFrame.src = file;
+
+  setTimeout(() => {
+    pdfFrame.style.height = (window.innerHeight - 50) + "px";  
+  }, 200);
 }
+
 
     function closePreview() {
       previewOverlay.style.display = "none";
@@ -491,7 +525,49 @@ function removeBook(bookId) {
 
    
     function searchBooks() { let input = document.getElementById('searchInput').value.toLowerCase(); let books = document.getElementsByClassName('book'); for (let i = 0; i < books.length; i++) { let title = books[i].getElementsByTagName("h3")[0].innerText.toLowerCase(); let author = books[i].getElementsByClassName("author")[0]?.innerText.toLowerCase() || ""; let year = books[i].getElementsByClassName("year")[0]?.innerText.toLowerCase() || ""; if (title.includes(input) || author.includes(input) || year.includes(input)) { books[i].style.display = "block"; } else { books[i].style.display = "none"; } } }
-  </script>
+ // === Pinch to Zoom ===
+let scale = 1;
+let startDist = 0;
+
+const wrapper = document.getElementById("zoomWrapper");
+
+wrapper.addEventListener("touchstart", function (e) {
+  if (e.touches.length === 2) {
+    startDist = getDistance(e.touches[0], e.touches[1]);
+  }
+});
+
+wrapper.addEventListener("touchmove", function (e) {
+  if (e.touches.length === 2) {
+    e.preventDefault();
+
+    let newDist = getDistance(e.touches[0], e.touches[1]);
+    let zoomChange = newDist / startDist;
+
+    let newScale = scale * zoomChange;
+
+    // Limit zoom range
+    if (newScale < 0.7) newScale = 0.7;
+    if (newScale > 4) newScale = 4;
+
+    pdfFrame.style.transform = `scale(${newScale})`;
+  }
+}, { passive: false });
+
+wrapper.addEventListener("touchend", function (e) {
+  if (e.touches.length < 2) {
+    scale = Number(pdfFrame.style.transform.replace(/[^0-9.]/g, "")) || scale;
+  }
+});
+
+function getDistance(a, b) {
+  let x = a.pageX - b.pageX;
+  let y = a.pageY - b.pageY;
+  return Math.hypot(x, y);
+}
+
+ 
+ </script>
 </body>
 
 </html>
