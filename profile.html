@@ -635,20 +635,18 @@ button:hover::before {
     };
 
     // 6. Auth State Listener
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        // User is signed in. Render profile details.
-        renderProfile(user);
-      } else {
-        // User is signed out. Display a prompt or redirect.
-        container.innerHTML = `
-            <div style="text-align: center; padding: 50px;">
-                <p style="font-size: 1.2em; color: #aaa;">You are not logged in.</p>
-                <p>Please <a href="index.html" style="color: #4dabff; text-decoration: underline;">log in</a> to view your account details.</p>
-            </div>
-        `;
-      }
-    });
+   // 🔥 Redirect non-logged-in users to index.html immediately
+auth.onAuthStateChanged((user) => {
+    if (!user) {
+        // Not logged in → teleport to homepage
+        window.location.replace("index.html");
+        return;
+    }
+
+    // Logged-in → stay on this page and load profile
+    renderProfile(user);
+});
+
 
     // 7. Navigation Highlighting
     document.querySelectorAll('.nav-item').forEach(link => {
