@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sudoku</title>
+    <title>Games</title>
     <style>
         body {
             background-color: #0b1220;
@@ -376,6 +376,38 @@
   object-fit: cover; /* ensures it fills the box without distortion */
   margin-bottom: -12px;
 }
+/* Cool Tab Buttons */
+.tab-button {
+    background: rgba(25, 37, 56, 0.6);
+    border: 1px solid rgba(90, 120, 200, 0.25);
+    color: #cfe9ff;
+    padding: 10px 26px;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+    transition: 0.3s ease;
+    text-shadow: 0 0 6px rgba(88, 166, 255, 0.4);
+}
+
+/* Hover Glow */
+.tab-button:hover {
+    background: rgba(40, 57, 87, 0.7);
+    box-shadow: 0 0 10px rgba(88, 166, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Active Tab – Glowing Blue */
+.tab-button.active {
+    background: linear-gradient(135deg, rgba(77,171,255,0.25), rgba(155,89,255,0.18));
+    border: 1px solid rgba(90,150,255,0.35);
+    color: #ffffff;
+    box-shadow: 0 0 12px rgba(0,153,255,0.6);
+    text-shadow: 0 0 10px rgba(0,180,255,0.8);
+    transform: scale(1.04);
+}
+
 </style>
 
     <!-- Firebase SDKs -->
