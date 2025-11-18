@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome-Abhay 10th Batch 2026</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #0b1220;
+        font-family: "Segoe UI", Arial, sans-serif;
+        color: white;
+    }
+
+    /* Header */
+    .top-bar {
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background:#0b1220;
+        font-size: 15px;
+    }
+
+    .top-bar span {
+        opacity: 0.7;
+        cursor: pointer;
+    }
+
+    .breadcrumb-active {
+        color: #ff9400;
+        font-weight: 600;
+    }
+
+    /* Card */
+    .video-card {
+        background:#1c2940;
+        padding:15px;
+        margin:25px auto;
+        width:90%;
+        border-radius:12px;
+        display:flex;
+        align-items:center;
+        gap:15px;
+        box-shadow:0 3px 10px rgba(0,0,0,0.3);
+    }
+ /* keep the Watch Now link/button pinned to the right edge of the card */
+   .video-card a { margin-left: auto; display: flex; align-items: center; }
+   .watch-btn { margin-left: 0; }
+    .video-card img {
+        width:85px;
+        border-radius:10px;
+    }
+
+    .video-title {
+        font-size:18px;
+        font-weight:600;
+    }
+
+    .btn-watch {
+        margin-left:auto;
+        padding:10px 18px;
+        background:#ffffff22;
+        border:none;
+        border-radius:8px;
+        color:white;
+        cursor:pointer;
+        font-size:14px;
+    }
+
+    /* Video Player Box */
+    .player-box {
+        width:90%;
+        aspect-ratio:16/9;
+        margin:20px auto;
+        background:black;
+        border-radius:12px;
+        overflow:hidden;
+        display:none;
+    }
+
+    video {
+        width:100%;
+        height:100%;
+    }.watch-btn {
+    margin-left:auto;
+    padding:10px 20px;
+    background:#0094d8;
+    border:none;
+    border-radius:8px;
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.watch-btn:hover {
+    background:#0074aa;
+}
+@keyframes glowMove {
+  0% { text-shadow: 0 0 8px #1e90ff; }
+  50% { text-shadow: 0 0 16px #00c3ff; }
+  100% { text-shadow: 0 0 8px #1e90ff; }
+}
+
+/* ===== COOL NAVBAR ===== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  padding: 10px 0;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.bottom-nav .nav-item {
+  color: #aaa;
+  text-align: center;
+  flex: 1;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.bottom-nav .nav-item:hover {
+  color: #fff;
+  transform: scale(1.2);
+}
+
+/* Highlight current active tab */
+.bottom-nav .nav-item.active {
+  color: #4dabff;
+}
+
+.bottom-nav .nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40%;
+  height: 3px;
+  background: #4dabff;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+    /* Top-left back button (same as Oswaal) */
+    .back-btn {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1100;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.03);
+      text-decoration: none;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+    .back-btn svg {
+      width: 20px;
+      height: 20px;
+      display: block;
+      fill: #e8edf6;
+    }
+    .back-btn:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.06);
+    }
+</style>
+
+ <!-- Back button (inline SVG) -->
+  <a href="collection.html" class="back-btn" aria-label="Go back to Collections">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+    </svg>
+</head>
+<body>
+ <!-- Header -->
+<header style="text-align:center;padding:15px;background:#0b1220;position:relative;">
+  <a href="index.html"><img src="logo.png" alt="BOOKStore Logo" style="height:50px;"></a>
+
+<!-- Breadcrumb Navigation -->
+<div class="top-bar">
+    <span onclick="goBack()">Lectures</span> ›
+    <span class="breadcrumb-active">Welcome</span>
+</div>
+
+<!-- Card -->
+<div class="video-card">
+    <img src="https://play-lh.googleusercontent.com/-tLt6jjKIAtTLDpeIYkQrZ-mLr0xAi1UICQ-Xhw_psDWHLF7hSnl80wqBA2ckKdjF7aU=w240-h480-rw">
+    <div class="video-title">Welcome</div>
+   <a href="play.html" style="text-decoration:none;">
+    <button class="watch-btn">Watch Now</button>
+</a>
+
+</div>
+
+<!-- Video Player -->
+<div class="player-box" id="playerBox">
+    <video id="player" controls>
+        <source src="https://d3cx6qbbd4cbso.cloudfront.net/file_library/videos/vod_non_drm_ios/4603299/1763294304_8192435093590433/sunny/1763294300828_380976912071675500_video_VOD.m3u8" type="application/x-mpegURL">
+    </video>
+</div>
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <img src="home.svg" alt="Home" class="nav-icon"><br><span>Home</span>
+    </a>
+    <a href="games.html" class="nav-item">
+      <img src="game.svg" alt="Game" class="nav-icon"><br><span>Game</span>
+    </a>
+    <a href="collection.html" class="nav-item active">
+      <img src="collection.svg" alt="Collections" class="nav-icon"><br><span>Collections</span>
+    </a>
+    <a href="profile.html" class="nav-item">
+      <img src="ai.svg" alt="Profile" class="nav-icon"><br><span>Account</span>
+    </a>
+  </nav>
+
+<style>
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #121a2a;
+    display: flex;
+    justify-content: space-around;
+    border-top: 2px solid #1f2a3d;
+    z-index: 999;
+  }
+  .nav-item {
+    flex: 1;
+    text-align: center;
+    color: #aaa;
+    padding: 8px 0;
+    font-size: 14px;
+    text-decoration: none;
+    transition: 0.2s;
+  }
+  .nav-icon {
+    height: 20px;
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 4px;
+  }
+  .nav-item span {
+    display: block;
+    font-size: 12px;
+  }
+  .nav-item.active,
+  .nav-item:hover {
+    color: #4dabff;
+    font-weight: bold;
+  }
+  body {
+    padding-bottom: 60px; /* prevent content from hiding behind nav */
+  }
+</style>
+<script>
+  // Highlight current tab automatically
+  const currentPage = location.pathname.split('/').pop();
+  document.querySelectorAll('.nav-item').forEach(link => {
+    if (link.getAttribute('href') === currentPage) {
+      link.classList.add('active');
+    }
+  });
+  const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      // Remove active from all
+      navItems.forEach(i => i.classList.remove('active'));
+      // Add active to clicked
+      item.classList.add('active');
+    });
+  });
+
+  // Optional: highlight based on current URL
+  navItems.forEach(item => {
+    if(item.href === window.location.href) {
+      item.classList.add('active');
+    }
+  });
+</script>
+<script>
+function goBack() {
+    window.location.href = "abhay.html";
+}
+
+function showPlayer() {
+    document.getElementById("playerBox").style.display = "block";
+    document.getElementById("player").play();
+}
+</script>
+
+</body>
+</html>

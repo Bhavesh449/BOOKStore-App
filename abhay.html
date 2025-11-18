@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abhay 10th Batch 2026</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: #0b1220;
+        color: #ffffff;
+    }
+
+    /* Top Section */
+    .header {
+        padding: 30px 20px;
+        background: 1c2940;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+    }
+
+    .title {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .validity {
+        font-size: 14px;
+        opacity: 0.7;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* Tabs */
+    .tabs {
+        display: flex;
+        background: #1c2940;
+        border-bottom: 1px solid #1c2940;
+        margin-top: 10px;
+    }
+
+    .tab {
+        flex: 1;
+        text-align: center;
+        padding: 15px 0;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.2s;
+        opacity: 0.6;
+    }
+
+    .tab.active {
+        opacity: 1;
+        border-bottom: 3px solid #ffffff;
+        font-weight: bold;
+    }
+
+    /* Content Boxes */
+    .content {
+        padding: 25px;
+        display: none;
+    }
+
+    .content.active {
+        display: block;
+    }
+
+    /* Overview List */
+    .list {
+        background: 1c2940;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        line-height: 1.7;
+        font-size: 15px;
+        text-align: left;
+    }
+
+    /* Folder Card */
+    .folder-card {
+        background: #1c2940;
+        padding: 15px;
+        width: 90%;
+        margin: 20px auto;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        cursor: pointer;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        transition: 0.2s;
+    }
+
+    .folder-card:hover {
+        transform: scale(1.02);
+    }
+
+    .folder-img {
+        width: 85px;
+        border-radius: 10px;
+    }
+
+    .folder-right {
+        flex-grow: 1;
+    }
+
+    .folder-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .folder-topics {
+        opacity: 0.7;
+        font-size: 14px;
+    }
+
+    .arrow {
+        font-size: 22px;
+        opacity: 0.5;
+    }
+    /* Top-left back button (same as Oswaal) */
+    .back-btn {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1100;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.03);
+      text-decoration: none;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+    .back-btn svg {
+      width: 20px;
+      height: 20px;
+      display: block;
+      fill: #e8edf6;
+    }
+    .back-btn:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.06);
+    }
+/* ===== COOL NAVBAR ===== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  padding: 10px 0;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.bottom-nav .nav-item {
+  color: #aaa;
+  text-align: center;
+  flex: 1;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.bottom-nav .nav-item:hover {
+  color: #fff;
+  transform: scale(1.2);
+}
+
+/* Highlight current active tab */
+.bottom-nav .nav-item.active {
+  color: #4dabff;
+}
+
+.bottom-nav .nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40%;
+  height: 3px;
+  background: #4dabff;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+</style>
+ <!-- Back button (inline SVG) -->
+  <a href="collection.html" class="back-btn" aria-label="Go back to Collections">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+    </svg>
+  </a>
+</head>
+<body>
+ <!-- Header -->
+<header style="text-align:center;padding:15px;background:#0b1220;position:relative;">
+  <a href="index.html"><img src="logo.png" alt="BOOKStore Logo" style="height:50px;"></a>
+
+<!-- Header -->
+<div class="header">
+    <div class="title">Abhay 10th Batch 2026</div>
+    <div class="validity">
+        📄 Validity: 15/Nov/2025 - 30/04/2026
+    </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+    <div class="tab active" onclick="showTab('overview')">Overview</div>
+    <div class="tab" onclick="showTab('video')">Lectures</div>
+</div>
+
+<!-- Overview Tab -->
+<div id="overview" class="content active">
+    <div class="list">
+        • We'll cover Science, Maths, Social Science, English( course A and B ), Hindi( Course A and B ), Sanskrit and IT for class 10th students.<br><br>
+        • Live lectures will be conducted, and in case you miss a session, recordings will be available to students in the BOOKStore app/website.<br><br>
+        • Classes will be scheduled according to your school timings.<br><br>
+        • There will be two classes per day, each lasting 1 hour 30 mins,  timings will be shared in orientation session.<br><br>
+        • Every fifth class will be a dedicated doubt-solving session.<br><br>
+        • A weekly schedule will be provided for your convenience.<br><br>
+        • Class notes will be provided in PDF format after each class on the BOOKStore App/website.<br><br>
+        • The entire course will remain accessible to you until your exams in 2026<br><br>
+        • Classes will commence on 1st December 2025 and the syllabus will be completed by mid January.<br><br>
+        • English, Hindi, Sanskrit and IT will be given recorded.
+    </div>
+</div>
+
+<!-- Video Tab -->
+<div id="video" class="content">
+
+    <div class="folder-card" onclick="location.href='welcome.html'">
+        <img class="folder-img" src="https://play-lh.googleusercontent.com/-tLt6jjKIAtTLDpeIYkQrZ-mLr0xAi1UICQ-Xhw_psDWHLF7hSnl80wqBA2ckKdjF7aU=w240-h480-rw" alt="Folder">
+        <div class="folder-right">
+            <div class="folder-title">Welcome</div>
+            <div class="folder-topics">1 Topics</div>
+        </div>
+        <div class="arrow">➤</div>
+    </div>
+
+</div>
+
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <img src="home.svg" alt="Home" class="nav-icon"><br><span>Home</span>
+    </a>
+    <a href="games.html" class="nav-item">
+      <img src="game.svg" alt="Game" class="nav-icon"><br><span>Game</span>
+    </a>
+    <a href="collection.html" class="nav-item active">
+      <img src="collection.svg" alt="Collections" class="nav-icon"><br><span>Collections</span>
+    </a>
+    <a href="profile.html" class="nav-item">
+      <img src="ai.svg" alt="Profile" class="nav-icon"><br><span>Account</span>
+    </a>
+  </nav>
+
+<style>
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #121a2a;
+    display: flex;
+    justify-content: space-around;
+    border-top: 2px solid #1f2a3d;
+    z-index: 999;
+  }
+  .nav-item {
+    flex: 1;
+    text-align: center;
+    color: #aaa;
+    padding: 8px 0;
+    font-size: 14px;
+    text-decoration: none;
+    transition: 0.2s;
+  }
+  .nav-icon {
+    height: 20px;
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 4px;
+  }
+  .nav-item span {
+    display: block;
+    font-size: 12px;
+  }
+  .nav-item.active,
+  .nav-item:hover {
+    color: #4dabff;
+    font-weight: bold;
+  }
+  body {
+    padding-bottom: 60px; /* prevent content from hiding behind nav */
+  }
+</style>
+<script>
+  // Highlight current tab automatically
+  const currentPage = location.pathname.split('/').pop();
+  document.querySelectorAll('.nav-item').forEach(link => {
+    if (link.getAttribute('href') === currentPage) {
+      link.classList.add('active');
+    }
+  });
+  const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      // Remove active from all
+      navItems.forEach(i => i.classList.remove('active'));
+      // Add active to clicked
+      item.classList.add('active');
+    });
+  });
+
+  // Optional: highlight based on current URL
+  navItems.forEach(item => {
+    if(item.href === window.location.href) {
+      item.classList.add('active');
+    }
+  });
+</script>
+<script>
+    function showTab(tab) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+
+        event.target.classList.add('active');
+        document.getElementById(tab).classList.add('active');
+    }
+</script>
+
+</body>
+</html>
